@@ -10,12 +10,12 @@ class VendingMachine:
         self.number_of_100_yen = 10 # 100円玉の在庫
         self.charge = 0 # お釣り
 
-    def buy(self, i, kind_of_drink):
+    def buy(self, payment, kind_of_drink):
         '''
         ジュースを購入する.
         Parameters
         ----------
-        i            : 投入金額. 100円と500円のみ受け付ける.
+        payment            : 投入金額. 100円と500円のみ受け付ける.
         kind_of_drink: ジュースの種類. コーラ({@code Juice.COKE}),ダイエットコーラ({@code Juice.DIET_COKE},お茶({@code Juice.TEA})が指定できる.
 
         Returns
@@ -24,34 +24,34 @@ class VendingMachine:
         '''
 
         # 100円と500円だけ受け付ける
-        if (i != 100) and (i != 500):
-            self.charge += i
+        if (payment != 100) and (payment != 500):
+            self.charge += payment
             return None
 
         if (kind_of_drink == Drink.COKE) and (self.quantity_of_coke == 0):
-            self.charge += i
+            self.charge += payment
             return None
         elif (kind_of_drink == Drink.DIET_COKE) and \
                 (self.quantity_of_diet_coke == 0):
-            self.charge += i
+            self.charge += payment
             return None
         elif (kind_of_drink == Drink.TEA) and (self.quantity_of_tea == 0):
-            self.charge += i
+            self.charge += payment
             return None
 
         # 釣り銭不足
-        if i == 500 and self.number_of_100_yen < 4:
-            self.charge += i
+        if payment == 500 and self.number_of_100_yen < 4:
+            self.charge += payment
             return None
 
-        if i == 100:
+        if payment == 100:
             # 100円玉を釣り銭に使える
             self.number_of_100_yen += 1
-        elif i == 500:
+        elif payment == 500:
             # 400円のお釣り
-            self.charge += (i - 100)
+            self.charge += (payment - 100)
             # 100円玉を釣り銭に使える
-            self.number_of_100_yen -= (i - 100) / 100
+            self.number_of_100_yen -= (payment - 100) / 100
 
         if kind_of_drink == Drink.COKE:
             self.quantity_of_coke -= 1
